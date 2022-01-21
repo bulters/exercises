@@ -36,10 +36,11 @@ lecture1Spec = describe "Lecture 1" $ do
         it "Negative"            $ minmax (-10) 3 (-5) `shouldBe` 13
 
     describe "subString" $ do
-        it "One character"     $ subString 0 0       "Hello!" `shouldBe` "H"
-        it "Two characters"    $ subString 0 1       "Hello!" `shouldBe` "He"
-        it "Bounds are bigger" $ subString 0 100     "Hello!" `shouldBe` "Hello!"
-        it "From negative"     $ subString (-1) 3    "Hello!" `shouldBe` "Hell"
+        it "One character"     $ subString 0 0 "Hello!"       `shouldBe` "H"
+        it "Two characters"    $ subString 0 1 "Hello!"       `shouldBe` "He"
+        it "Upper bound is bigger" $ subString 0 100 "Hello!"     `shouldBe` "Hello!"
+        it "Both bounds are larger" $ subString (-1) 100 "Hello!" `shouldBe` "Hello!"
+        it "From negative"     $ subString (-1) 3 "Hello!"    `shouldBe` "Hell"
         it "Both negative"     $ subString (-7) (-3) "Hello!" `shouldBe` ""
         it "Negative to zero"  $ subString (-5) 0    "Hello!" `shouldBe` "H"
         it "0 to -1"           $ subString 0 (-1)    "Hello!" `shouldBe` ""
