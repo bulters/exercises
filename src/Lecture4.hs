@@ -306,9 +306,13 @@ implement the next task.
 -}
 
 combineRows :: NonEmpty Row -> Stats
-combineRows (r :| [])      = rowToStats r
-combineRows (r :| [r'])    = rowToStats r <> rowToStats r'
-combineRows (r :| (r':rs)) = rowToStats r <> combineRows (r' :| rs)
+combineRows (r :| rs) = go (rowToStats r) rs
+                        where go !acc []       = acc
+                              go !acc (r':rs') = go (acc <> rowToStats r') rs'
+
+-- combineRows (r :| [])      = rowToStats r
+-- combineRows (r :| [r'])    = rowToStats r <> rowToStats r'
+-- combineRows (r :| (r':rs)) = rowToStats r <> combineRows (r' :| rs)
 
 {-
 After we've calculated stats for all rows, we can then pretty-print
