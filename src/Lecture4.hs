@@ -142,11 +142,9 @@ errors. We will simply return an optional result here.
 -}
 
 parseProduct :: String -> Maybe String
-parseProduct ps = let mp = readMaybe (show ps)
-                  in case mp of
-                    Just "" -> Nothing
-                    Just x  -> Just x
-                    Nothing -> Nothing
+parseProduct ps
+   | null ps = Nothing
+   | otherwise = Just ps
 
 parseTradeType :: String -> Maybe TradeType
 parseTradeType = readMaybe
