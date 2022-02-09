@@ -104,8 +104,8 @@ module Lecture4
     ) where
 
 import Control.Monad (guard)
-import Data.List (intercalate, uncons)
-import Data.List.NonEmpty (NonEmpty (..), fromList)
+import Data.List (intercalate)
+import Data.List.NonEmpty (NonEmpty (..), nonEmpty)
 import Data.List.Split (splitOn)
 import Data.Maybe (mapMaybe)
 import Data.Semigroup (Max (..), Min (..), Semigroup (..), Sum (..))
@@ -333,7 +333,7 @@ the file doesn't have any products.
 -}
 
 calculateStats :: String -> String
-calculateStats ls = displayStats . combineRows . fromList . mapMaybe parseRow $ lines ls
+calculateStats ls = maybe "Empty or invalid input" (displayStats . combineRows) .  nonEmpty . mapMaybe parseRow $ lines ls
 
 {- The only thing left is to write a function with side-effects that
 takes a path to a file, reads its content, calculates stats and prints
