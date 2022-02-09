@@ -203,10 +203,9 @@ instance for the 'Stats' type itself.
 
 -- <!> defines a strict version of <> for the Maybe type.
 (<!>) :: Semigroup a => Maybe a -> Maybe a -> Maybe a
-Nothing   <!> Nothing   = Nothing
-(Just !x) <!> Nothing   = Just x
-Nothing   <!> (Just !y) = Just y
-(Just !x) <!> (Just !y) = Just (x <> y)
+a <!> b = case a <> b of
+  Nothing   -> Nothing
+  Just (!x) -> Just x
 
 instance Semigroup Stats where
   a <> b = Stats { statsTotalPositions = statsTotalPositions a <> statsTotalPositions b
