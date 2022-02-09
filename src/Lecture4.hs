@@ -103,6 +103,7 @@ module Lecture4
     , printProductStats
     ) where
 
+import Control.Monad (guard)
 import Data.List (intercalate, uncons)
 import Data.List.NonEmpty (NonEmpty (..), fromList)
 import Data.List.Split (splitOn)
@@ -141,32 +142,15 @@ errors. We will simply return an optional result here.
 🕯 HINT: Use the 'readMaybe' function from the 'Text.Read' module.
 -}
 
-parseProduct :: String -> Maybe String
-parseProduct ps
-   | null ps = Nothing
-   | otherwise = Just ps
-
-parseTradeType :: String -> Maybe TradeType
-parseTradeType = readMaybe
-
-parseCosts :: String -> Maybe Int
-parseCosts cs = let mc = readMaybe cs
-                in case mc of
-                  Just x  -> if x < 0 then Nothing else Just x
-                  Nothing -> Nothing
 
 parseRow :: String -> Maybe Row
-parseRow s = let parts = splitOn "," s
-             in case length parts of
-               3 -> do
-                 (pp, r1) <- uncons parts
-                 (ttp, r2) <- uncons r1
-                 (cp, _) <- uncons r2
-                 p <- parseProduct pp
-                 tt <- parseTradeType ttp
-                 c <- parseCosts cp
-                 return Row { rowProduct = p, rowTradeType = tt, rowCost = c }
-               _ -> Nothing
+parseRow s = do
+  [pp, ttp, cp] <- Just $ splitOn "," s
+  guard $ pp /= ""
+  tt <- readMaybe ttp
+  c <- readMaybe cp
+  guard $ c >= 0
+  return Row {rowProduct = pp, rowTradeType = tt, rowCost = c }
 
 {-
 We have almost all we need to calculate final stats in a simple and
