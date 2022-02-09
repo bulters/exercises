@@ -71,6 +71,8 @@ library
                        Lecture4
   build-depends:       base
                      , split
+		     , bytestring
+		     , text
 
 executable lecture4
   import:              common-options, common-exe
@@ -102,6 +104,7 @@ test-suite exercises-test
                      , hedgehog         ^>= 1.0
                      , hedgehog-classes ^>= 0.2
                      , silently         ^>= 1.2
+		     , bytestring
 
 test-suite doctest-lecture1
   import:              common-doctest

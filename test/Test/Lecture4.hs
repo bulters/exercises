@@ -14,6 +14,8 @@ import Lecture4 (MaxLen (..), Row (..), Stats (..), TradeType (..), calculateSta
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 
+import qualified Data.ByteString.Lazy.Char8 as BLC
+
 
 lecture4Spec :: Spec
 lecture4Spec = describe "Lecture 4" $ do
@@ -117,7 +119,7 @@ lecture4Spec = describe "Lecture 4" $ do
         it "Documentation example" $ lines (displayStats stats) `shouldBe` stringStats
 
     describe "calculateStats" $ do
-        let input = unlines
+        let input = BLC.pack $ unlines
                 [ "Name,Type,Amount"
                 , "Apples,Sell,25"
                 , "Tomatoes,Sell,10"

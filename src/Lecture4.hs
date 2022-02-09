@@ -104,9 +104,10 @@ module Lecture4
     ) where
 
 import Control.Monad (guard)
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Lazy.Char8 as BLC
 import Data.List (intercalate)
 import Data.List.NonEmpty (NonEmpty (..), nonEmpty)
-import Data.List.Split (splitOn)
 import Data.Maybe (mapMaybe)
 import Data.Semigroup (Max (..), Min (..), Semigroup (..), Sum (..))
 import System.Environment (getArgs)
@@ -143,14 +144,14 @@ errors. We will simply return an optional result here.
 -}
 
 
-parseRow :: String -> Maybe Row
+parseRow :: BL.ByteString -> Maybe Row
 parseRow s = do
-  [pp, ttp, cp] <- Just $ splitOn "," s
+  [pp, ttp, cp] <- Just $ BLC.split ',' s
   guard $ pp /= ""
-  tt <- readMaybe ttp
-  c <- readMaybe cp
+  tt <- readMaybe $ BLC.unpack ttp
+  c <- readMaybe $ BLC.unpack cp
   guard $ c >= 0
-  return Row {rowProduct = pp, rowTradeType = tt, rowCost = c }
+  return Row {rowProduct = BLC.unpack pp, rowTradeType = tt, rowCost = c }
 
 {-
 We have almost all we need to calculate final stats in a simple and
@@ -332,8 +333,8 @@ the file doesn't have any products.
 🕯 HINT: Have a look at 'mapMaybe' function from 'Data.Maybe' (you may need to import it).
 -}
 
-calculateStats :: String -> String
-calculateStats ls = maybe "Empty or invalid input" (displayStats . combineRows) .  nonEmpty . mapMaybe parseRow $ lines ls
+calculateStats :: BL.ByteString -> String
+calculateStats ls = maybe "Empty or invalid input" (displayStats . combineRows) .  nonEmpty . mapMaybe parseRow $ BLC.lines ls
 
 {- The only thing left is to write a function with side-effects that
 takes a path to a file, reads its content, calculates stats and prints
@@ -344,7 +345,7 @@ Use functions 'readFile' and 'putStrLn' here.
 
 printProductStats :: FilePath -> IO ()
 printProductStats fp = do
-  content <- readFile fp
+  content <- BL.readFile fp
   putStrLn $ calculateStats content
 
 {-
