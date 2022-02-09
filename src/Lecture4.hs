@@ -259,10 +259,9 @@ withSell s r = s { statsTotalSum = Sum $ rowCost r
                  }
 
 rowToStats :: Row -> Stats
-rowToStats r
-  | rowTradeType r == Buy = withBuy (baseStats r) r
-  | rowTradeType r == Sell = withSell (baseStats r) r
-  | otherwise = Stats 0 0 (Max 0) (Min 0) Nothing Nothing Nothing Nothing (MaxLen "")
+rowToStats r = case rowTradeType r of
+  Buy  -> withBuy (baseStats r) r
+  Sell -> withSell (baseStats r) r
 
 {-
 Now, after we learned to convert a single row, we can convert a list of rows!
