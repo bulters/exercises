@@ -69,12 +69,17 @@ library
                        Lecture2
                        Lecture3
                        Lecture4
+  build-depends:       base
+                     , split
+		     , bytestring
+		     , text
 
 executable lecture4
   import:              common-options, common-exe
   hs-source-dirs:      app
   main-is:             Main.hs
-  build-depends:       base, exercises
+  build-depends:       base
+                     , exercises
 
 executable generate-many-products
   import:              common-options, common-exe
@@ -99,6 +104,7 @@ test-suite exercises-test
                      , hedgehog         ^>= 1.0
                      , hedgehog-classes ^>= 0.2
                      , silently         ^>= 1.2
+		     , bytestring
 
 test-suite doctest-lecture1
   import:              common-doctest

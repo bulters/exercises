@@ -14,6 +14,8 @@ import Lecture4 (MaxLen (..), Row (..), Stats (..), TradeType (..), calculateSta
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 
+import qualified Data.ByteString.Lazy.Char8 as BLC
+
 
 lecture4Spec :: Spec
 lecture4Spec = describe "Lecture 4" $ do
@@ -53,6 +55,12 @@ lecture4Spec = describe "Lecture 4" $ do
     describe "Semigroup: MaxLen" $ do
         it "Laws: Semigroup" $
             lawsCheck (semigroupLaws genMaxLen) `shouldReturn` True
+        it "Right side is Larger" $
+            MaxLen "12345" <> MaxLen "12" `shouldBe` MaxLen "12345"
+        it "Left side is Larger" $
+            MaxLen "12" <> MaxLen "12345" `shouldBe` MaxLen "12345"
+        it "Both sides equal" $
+            MaxLen "abcde" <> MaxLen "12345" `shouldBe` MaxLen "abcde"
 
     describe "Semigroup: Stats" $ do
         it "Laws: Semigroup" $
@@ -111,7 +119,7 @@ lecture4Spec = describe "Lecture 4" $ do
         it "Documentation example" $ lines (displayStats stats) `shouldBe` stringStats
 
     describe "calculateStats" $ do
-        let input = unlines
+        let input = BLC.pack $ unlines
                 [ "Name,Type,Amount"
                 , "Apples,Sell,25"
                 , "Tomatoes,Sell,10"
